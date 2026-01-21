@@ -24,3 +24,9 @@
 ## 测试与流程
 - **测试:** go test（单元为主，核心转发与pacer逻辑需覆盖）
 - **提交:** Conventional Commits（可选）
+
+---
+
+## 构建与发布
+- **脚本:** scripts/build.sh（默认输出到项目根目录 dist/，可用 OUT_DIR 覆盖）
+- **跨平台:** 默认构建 Linux CLI 与 Windows CLI；Windows GUI 在 Windows 环境自动构建，或设置 BUILD_WINDOWS_GUI=1 强制交叉编译

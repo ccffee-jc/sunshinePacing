@@ -12,6 +12,7 @@
 | 202601211643 | Sunshine UDP Pacing Proxy | 功能 | ✅已完成 | [history/2026-01/202601211643_sunshine_pacing_proxy](2026-01/202601211643_sunshine_pacing_proxy/) |
 | 202601211713 | 端口基准对调 | 变更 | ✅已完成 | [history/2026-01/202601211713_port_swap](2026-01/202601211713_port_swap/) |
 | 202601211732 | internal_host 支持 | 变更 | ✅已完成 | [history/2026-01/202601211732_internal_host](2026-01/202601211732_internal_host/) |
+| 202601211800 | 构建脚本与编译目录 | 变更 | ✅已完成 | [history/2026-01/202601211800_build_script](2026-01/202601211800_build_script/) |
 
 ---
 
@@ -23,3 +24,4 @@
 - [202601211643_sunshine_pacing_proxy](2026-01/202601211643_sunshine_pacing_proxy/) - UDP 代理与 pacing MVP
 - [202601211713_port_swap](2026-01/202601211713_port_swap/) - 外部/内部端口基准对调
 - [202601211732_internal_host](2026-01/202601211732_internal_host/) - 内部转发目标主机可配置
+- [202601211800_build_script](2026-01/202601211800_build_script/) - 构建脚本与编译目录管理
