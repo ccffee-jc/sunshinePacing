@@ -5,6 +5,11 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 OUT_DIR="${OUT_DIR:-${ROOT}/dist}"
 HOST_GOOS="$(go env GOOS)"
 
+#export HTTP_PROXY="${HTTP_PROXY:-http://127.0.0.1:10809}"
+#export HTTPS_PROXY="${HTTPS_PROXY:-http://127.0.0.1:10809}"
+#export http_proxy="${http_proxy:-http://127.0.0.1:10809}"
+#export https_proxy="${https_proxy:-http://127.0.0.1:10809}"
+
 mkdir -p "${OUT_DIR}"
 
 echo "[1/3] 构建 Linux CLI..."
