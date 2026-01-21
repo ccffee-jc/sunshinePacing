@@ -11,7 +11,7 @@ import (
 
 // Config 表示代理的运行配置。
 type Config struct {
-	BasePort       int          `yaml:"base_port"`
+	BasePort       int          `yaml:"base_port"` // Sunshine 基准端口，其他端口按偏移推导(HTTPS-5/HTTP0/Web+1/RTSP+21/Video+9/Control+10/Audio+11/Mic+13)
 	InternalOffset int          `yaml:"internal_offset"`
 	InternalHost   string       `yaml:"internal_host"`
 	Video          VideoConfig  `yaml:"video"`

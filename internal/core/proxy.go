@@ -22,6 +22,11 @@ type Metrics struct {
 	VideoQueueLen int
 }
 
+type tcpListener struct {
+	entry    PortEntry
+	listener net.Listener
+}
+
 // Proxy 表示代理实例。
 type Proxy struct {
 	cfg     config.Config
@@ -36,6 +41,10 @@ type Proxy struct {
 	intVideo   *net.UDPConn
 	intControl *net.UDPConn
 	intAudio   *net.UDPConn
+
+	udpExternal  map[int]*net.UDPConn
+	udpInternal  map[int]*net.UDPConn
+	tcpListeners []tcpListener
 
 	cancel  context.CancelFunc
 	ctx     context.Context
@@ -93,7 +102,7 @@ func (p *Proxy) Start(ctx context.Context) error {
 
 	p.startLoops()
 	atomic.StoreUint32(&p.running, 1)
-	log.Printf("代理启动: external=%+v internal=%+v", p.ports.External, p.ports.Internal)
+	log.Printf("代理启动: udp=%d tcp=%d", len(p.ports.UDP), len(p.ports.TCP))
 	return nil
 }
 
@@ -124,41 +133,62 @@ func (p *Proxy) Metrics() Metrics {
 }
 
 func (p *Proxy) openSockets() error {
-	var err error
-	p.extVideo, err = listenUDP("0.0.0.0", p.ports.External.Video)
-	if err != nil {
-		return err
+	p.udpExternal = make(map[int]*net.UDPConn)
+	p.udpInternal = make(map[int]*net.UDPConn)
+	p.tcpListeners = nil
+	for _, entry := range p.ports.UDP {
+		ext, err := listenUDP("0.0.0.0", entry.ExternalPort)
+		if err != nil {
+			return err
+		}
+		p.udpExternal[entry.ExternalPort] = ext
+		internal, err := dialUDP(p.cfg.InternalHost, entry.InternalPort)
+		if err != nil {
+			closeConn(ext)
+			delete(p.udpExternal, entry.ExternalPort)
+			return err
+		}
+		p.udpInternal[entry.ExternalPort] = internal
+		switch entry.Stream {
+		case StreamVideo:
+			p.extVideo = ext
+			p.intVideo = internal
+		case StreamControl:
+			p.extControl = ext
+			p.intControl = internal
+		case StreamAudio:
+			p.extAudio = ext
+			p.intAudio = internal
+		}
 	}
-	p.extControl, err = listenUDP("0.0.0.0", p.ports.External.Control)
-	if err != nil {
-		return err
-	}
-	p.extAudio, err = listenUDP("0.0.0.0", p.ports.External.Audio)
-	if err != nil {
-		return err
-	}
-	p.intVideo, err = dialUDP(p.cfg.InternalHost, p.ports.Internal.Video)
-	if err != nil {
-		return err
-	}
-	p.intControl, err = dialUDP(p.cfg.InternalHost, p.ports.Internal.Control)
-	if err != nil {
-		return err
-	}
-	p.intAudio, err = dialUDP(p.cfg.InternalHost, p.ports.Internal.Audio)
-	if err != nil {
-		return err
+	for _, entry := range p.ports.TCP {
+		listener, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%d", entry.ExternalPort))
+		if err != nil {
+			return err
+		}
+		p.tcpListeners = append(p.tcpListeners, tcpListener{
+			entry:    entry,
+			listener: listener,
+		})
 	}
 	return nil
 }
 
 func (p *Proxy) closeSockets() {
-	closeConn(p.extVideo)
-	closeConn(p.extControl)
-	closeConn(p.extAudio)
-	closeConn(p.intVideo)
-	closeConn(p.intControl)
-	closeConn(p.intAudio)
+	for _, conn := range p.udpExternal {
+		closeConn(conn)
+	}
+	for _, conn := range p.udpInternal {
+		closeConn(conn)
+	}
+	for _, item := range p.tcpListeners {
+		if item.listener != nil {
+			_ = item.listener.Close()
+		}
+	}
+	p.udpExternal = nil
+	p.udpInternal = nil
+	p.tcpListeners = nil
 }
 
 func listenUDP(host string, port int) (*net.UDPConn, error) {

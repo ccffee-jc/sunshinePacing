@@ -14,12 +14,13 @@ const (
 	StreamVideo StreamType = iota
 	StreamControl
 	StreamAudio
+	StreamOther
 )
 
 // Session 保存单客户端地址与超时。
 type Session struct {
 	mu       sync.Mutex
-	addrs    map[StreamType]*net.UDPAddr
+	addrs    map[int]*net.UDPAddr
 	lastSeen time.Time
 	timeout  time.Duration
 }
@@ -27,33 +28,33 @@ type Session struct {
 // NewSession 创建会话管理器。
 func NewSession(timeout time.Duration) *Session {
 	return &Session{
-		addrs:   make(map[StreamType]*net.UDPAddr),
+		addrs:   make(map[int]*net.UDPAddr),
 		timeout: timeout,
 	}
 }
 
 // SetClient 更新客户端地址。
-func (s *Session) SetClient(stream StreamType, addr *net.UDPAddr) {
+func (s *Session) SetClient(port int, addr *net.UDPAddr) {
 	if addr == nil {
 		return
 	}
 	clone := cloneAddr(addr)
 	s.mu.Lock()
-	s.addrs[stream] = clone
+	s.addrs[port] = clone
 	s.lastSeen = time.Now()
 	s.mu.Unlock()
 }
 
 // GetClient 获取客户端地址，若超时则清空。
-func (s *Session) GetClient(stream StreamType) *net.UDPAddr {
+func (s *Session) GetClient(port int) *net.UDPAddr {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if !s.lastSeen.IsZero() && time.Since(s.lastSeen) > s.timeout {
-		s.addrs = make(map[StreamType]*net.UDPAddr)
+		s.addrs = make(map[int]*net.UDPAddr)
 		s.lastSeen = time.Time{}
 		return nil
 	}
-	addr := s.addrs[stream]
+	addr := s.addrs[port]
 	if addr == nil {
 		return nil
 	}
