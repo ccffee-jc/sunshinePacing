@@ -18,6 +18,7 @@
 用户通过 GUI 修改配置并启动代理。
 - 预期结果1：提供 base_port 与视频参数编辑
 - 预期结果2：可查看运行状态与基础统计
+- 预期结果3：启动时默认加载同目录 `sunshine-proxy.yml`，不存在则生成并填充表单
 
 ## API接口
 - 暂无对外 API
@@ -31,3 +32,4 @@
 
 ## 变更历史
 - [202601211643_sunshine_pacing_proxy](../../history/2026-01/202601211643_sunshine_pacing_proxy/) - GUI 运行管理
+- [202601212055_gui_default_config](../../history/2026-01/202601212055_gui_default_config/) - Windows GUI 默认配置与启动

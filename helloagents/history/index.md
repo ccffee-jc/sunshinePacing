@@ -13,6 +13,7 @@
 | 202601211713 | 端口基准对调 | 变更 | ✅已完成 | [history/2026-01/202601211713_port_swap](2026-01/202601211713_port_swap/) |
 | 202601211732 | internal_host 支持 | 变更 | ✅已完成 | [history/2026-01/202601211732_internal_host](2026-01/202601211732_internal_host/) |
 | 202601211800 | 构建脚本与编译目录 | 变更 | ✅已完成 | [history/2026-01/202601211800_build_script](2026-01/202601211800_build_script/) |
+| 202601212055 | Windows GUI 默认配置与启动 | 变更 | ✅已完成 | [history/2026-01/202601212055_gui_default_config](2026-01/202601212055_gui_default_config/) |
 
 ---
 
@@ -25,3 +26,4 @@
 - [202601211713_port_swap](2026-01/202601211713_port_swap/) - 外部/内部端口基准对调
 - [202601211732_internal_host](2026-01/202601211732_internal_host/) - 内部转发目标主机可配置
 - [202601211800_build_script](2026-01/202601211800_build_script/) - 构建脚本与编译目录管理
+- [202601212055_gui_default_config](2026-01/202601212055_gui_default_config/) - Windows GUI 默认配置与启动

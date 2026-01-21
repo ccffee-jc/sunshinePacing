@@ -29,4 +29,4 @@
 
 ## 构建与发布
 - **脚本:** scripts/build.sh（默认输出到项目根目录 dist/，可用 OUT_DIR 覆盖）
-- **跨平台:** 默认构建 Linux CLI 与 Windows CLI；Windows GUI 在 Windows 环境自动构建，或设置 BUILD_WINDOWS_GUI=1 强制交叉编译
+- **跨平台:** 默认构建 Linux CLI（sunshine-proxy）与 Windows CLI（sunshine-proxy-cli.exe）；Windows GUI 输出 sunshine-proxy.exe，在 Windows 环境自动构建，或设置 BUILD_WINDOWS_GUI=1 强制交叉编译

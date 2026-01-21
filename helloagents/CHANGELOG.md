@@ -6,6 +6,10 @@
 
 ## [Unreleased]
 
+### 变更
+- Windows GUI 启动时自动生成/加载同目录 sunshine-proxy.yml。
+- Windows 构建产物命名调整：GUI 为 sunshine-proxy.exe，CLI 为 sunshine-proxy-cli.exe。
+
 ## [0.2.3] - 2026-01-21
 
 ### 新增

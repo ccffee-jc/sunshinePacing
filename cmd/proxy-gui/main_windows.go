@@ -5,9 +5,11 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -48,6 +50,13 @@ func main() {
 
 	statusLabel := widget.NewLabelWithData(statusBind)
 	metricsLabel := widget.NewLabelWithData(metricsBind)
+
+	if defaultPath, err := defaultConfigPath(); err != nil {
+		dialog.ShowError(err, window)
+	} else {
+		cfgPathEntry.SetText(defaultPath)
+		loadOrCreateDefaultConfig(defaultPath, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry, statusBind, window)
+	}
 
 	var runningProxy *core.Proxy
 	var runningCancel context.CancelFunc
@@ -184,6 +193,47 @@ func setFormDefaults(baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, ti
 	burstEntry.SetText(strconv.Itoa(cfg.Video.BurstKB))
 	queueEntry.SetText(strconv.Itoa(cfg.Video.MaxQueueDelayMs))
 	tickEntry.SetText(strconv.Itoa(cfg.Video.TickMs))
+}
+
+func defaultConfigPath() (string, error) {
+	execPath, err := os.Executable()
+	if err != nil {
+		return "", fmt.Errorf("获取可执行文件路径失败: %w", err)
+	}
+	return filepath.Join(filepath.Dir(execPath), "sunshine-proxy.yml"), nil
+}
+
+func loadOrCreateDefaultConfig(path string, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry *widget.Entry, statusBind binding.String, window fyne.Window) {
+	if path == "" {
+		return
+	}
+	_, err := os.Stat(path)
+	if err == nil {
+		cfg, err := config.Load(path)
+		if err != nil {
+			dialog.ShowError(err, window)
+			return
+		}
+		fillForm(cfg, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry)
+		_ = statusBind.Set("已加载默认配置")
+		return
+	}
+	if !errors.Is(err, os.ErrNotExist) {
+		dialog.ShowError(fmt.Errorf("检查配置失败: %w", err), window)
+		return
+	}
+	cfg := config.DefaultConfig()
+	data, err := yaml.Marshal(cfg)
+	if err != nil {
+		dialog.ShowError(err, window)
+		return
+	}
+	if err := os.WriteFile(path, data, 0o644); err != nil {
+		dialog.ShowError(err, window)
+		return
+	}
+	fillForm(cfg, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry)
+	_ = statusBind.Set("已生成默认配置")
 }
 
 func fillForm(cfg config.Config, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry *widget.Entry) {
