@@ -70,7 +70,11 @@ func (p *Proxy) startExternal(entry PortEntry, ext *net.UDPConn, internal *net.U
 				log.Printf("外部端口读取失败: name=%s port=%d err=%v", entry.Name, entry.ExternalPort, err)
 				continue
 			}
-			p.session.SetClient(entry.ExternalPort, addr)
+			changed := p.session.SetClient(entry.ExternalPort, addr)
+			if changed && p.cfg.ConnectionLog.Enable {
+				internalTarget := fmt.Sprintf("%s:%d", p.cfg.InternalHost, entry.InternalPort)
+				log.Printf("UDP 连接: name=%s protocol=%s external=%d internal=%s client=%s", entry.Name, entry.Protocol, entry.ExternalPort, internalTarget, addr.String())
+			}
 			p.addStreamIn(entry.Stream, n)
 			if _, err := internal.Write(buf[:n]); err != nil {
 				log.Printf("转发到 Sunshine 失败: name=%s port=%d err=%v", entry.Name, entry.InternalPort, err)
@@ -154,6 +158,10 @@ func (p *Proxy) startTCPForwarders() {
 					}
 					log.Printf("TCP 接收失败: name=%s port=%d err=%v", entry.Name, entry.ExternalPort, err)
 					continue
+				}
+				if p.cfg.ConnectionLog.Enable {
+					target := fmt.Sprintf("%s:%d", p.cfg.InternalHost, entry.InternalPort)
+					log.Printf("TCP 连接: name=%s protocol=%s external=%d internal=%s client=%s", entry.Name, entry.Protocol, entry.ExternalPort, target, conn.RemoteAddr().String())
 				}
 				p.wg.Add(1)
 				go func(c net.Conn) {

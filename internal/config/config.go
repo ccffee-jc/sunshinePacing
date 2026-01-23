@@ -17,6 +17,7 @@ type Config struct {
 	Video          VideoConfig  `yaml:"video"`
 	Control        StreamConfig `yaml:"control"`
 	Audio          AudioConfig  `yaml:"audio"`
+	ConnectionLog ConnectionLogConfig `yaml:"connection_log"`
 }
 
 // VideoConfig 为视频 pacing 参数。
@@ -41,6 +42,11 @@ type AudioConfig struct {
 	MaxQueueDelayMs int    `yaml:"max_queue_delay_ms"`
 }
 
+// ConnectionLogConfig 为连接日志配置。
+type ConnectionLogConfig struct {
+	Enable bool `yaml:"enable"`
+}
+
 // DefaultConfig 返回包含默认值的配置。
 func DefaultConfig() Config {
 	return Config{
@@ -62,6 +68,9 @@ func DefaultConfig() Config {
 			Enable:          true,
 			Mode:            "priority",
 			MaxQueueDelayMs: 10,
+		},
+		ConnectionLog: ConnectionLogConfig{
+			Enable: false,
 		},
 	}
 }
@@ -87,9 +96,6 @@ func Load(path string) (Config, error) {
 
 // NormalizeAndValidate 补齐默认值并校验配置。
 func (c *Config) NormalizeAndValidate() error {
-	if c.InternalOffset == 0 {
-		c.InternalOffset = 1000
-	}
 	if c.InternalHost == "" {
 		c.InternalHost = "127.0.0.1"
 	}
@@ -120,7 +126,7 @@ func (c *Config) NormalizeAndValidate() error {
 	if c.BasePort < 1024 || c.BasePort > 65535 {
 		return fmt.Errorf("base_port 超出范围: %d", c.BasePort)
 	}
-	if c.InternalOffset < 1 || c.InternalOffset > 60000 {
+	if c.InternalOffset < 0 || c.InternalOffset > 60000 {
 		return fmt.Errorf("internal_offset 超出范围: %d", c.InternalOffset)
 	}
 	if c.InternalHost == "" {

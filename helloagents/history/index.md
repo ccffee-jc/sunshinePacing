@@ -15,6 +15,8 @@
 | 202601211800 | 构建脚本与编译目录 | 变更 | ✅已完成 | [history/2026-01/202601211800_build_script](2026-01/202601211800_build_script/) |
 | 202601212055 | Windows GUI 默认配置与启动 | 变更 | ✅已完成 | [history/2026-01/202601212055_gui_default_config](2026-01/202601212055_gui_default_config/) |
 | 202601220034 | Sunshine 全端口转发 | 变更 | ✅已完成 | [history/2026-01/202601220034_ports_forwarding](2026-01/202601220034_ports_forwarding/) |
+| 202601231327 | 本机47989端口族直转 | 变更 | ✅已完成 | [history/2026-01/202601231327_local_47989_forward](2026-01/202601231327_local_47989_forward/) |
+| 202601231353 | 连接日志开关 | 变更 | ✅已完成 | [history/2026-01/202601231353_connection_logging](2026-01/202601231353_connection_logging/) |
 
 ---
 
@@ -29,3 +31,5 @@
 - [202601211800_build_script](2026-01/202601211800_build_script/) - 构建脚本与编译目录管理
 - [202601212055_gui_default_config](2026-01/202601212055_gui_default_config/) - Windows GUI 默认配置与启动
 - [202601220034_ports_forwarding](2026-01/202601220034_ports_forwarding/) - Sunshine 全端口转发支持
+- [202601231327_local_47989_forward](2026-01/202601231327_local_47989_forward/) - 本机47989端口族直转
+- [202601231353_connection_logging](2026-01/202601231353_connection_logging/) - 连接日志开关

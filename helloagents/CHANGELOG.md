@@ -8,10 +8,12 @@
 
 ### 新增
 - 支持 Sunshine 全端口 TCP/UDP 转发（包含 UDP 48010 兼容）。
+- 支持连接日志开关（UDP/TCP 连接输出）。
 
 ### 变更
 - Windows GUI 启动时自动生成/加载同目录 sunshine-proxy.yml。
 - Windows 构建产物命名调整：GUI 为 sunshine-proxy.exe，CLI 为 sunshine-proxy-cli.exe。
+- 允许 internal_offset=0 以保持外部端口与 base_port 一致，并提供示例配置。
 
 ## [0.2.3] - 2026-01-21
 
