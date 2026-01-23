@@ -11,6 +11,7 @@
 - 支持连接日志开关（UDP/TCP 连接输出）。
 - 支持回包逐包日志开关（内部→外部）。
 - 支持 pacing.enable 纯转发模式开关。
+- 支持 Linux GUI 入口与构建产物 sunshine-proxy-gui。
 
 ### 变更
 - Windows GUI 启动时自动生成/加载同目录 sunshine-proxy.yml。
@@ -26,7 +27,7 @@
 - .gitignore 忽略 dist/ 编译目录。
 
 ### 修复
-- 无。
+- 修复 GUI 启动与保存时丢失配置字段（以配置文件为基准合并）。
 
 ### 移除
 - 无。

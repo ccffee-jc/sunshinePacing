@@ -1,4 +1,4 @@
-//go:build !windows
+//go:build !windows && !linux
 
 // 非 Windows 平台不提供 GUI。
 package main

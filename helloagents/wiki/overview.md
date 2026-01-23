@@ -7,10 +7,10 @@
 ## 1. 项目概述
 
 ### 目标与背景
-为 Sunshine 提供本机 UDP 代理转发 + pacing，压平视频突发，降低运营商整形导致的卡顿；Windows 提供 GUI，Linux 使用配置启动。
+为 Sunshine 提供本机 UDP 代理转发 + pacing，压平视频突发，降低运营商整形导致的卡顿；Windows 与 Linux 提供 GUI，Linux 同时支持 CLI 配置启动。
 
 ### 范围
-- **范围内:** UDP relay、端口映射、视频 pacing、单客户端会话、基础观测指标、Windows GUI、Linux CLI
+- **范围内:** UDP relay、端口映射、视频 pacing、单客户端会话、基础观测指标、Windows GUI、Linux GUI、Linux CLI
 - **范围外:** 多客户端支持、动态调参、DSCP/路由策略、透明抓包/重注入
 
 ### 干系人
@@ -26,6 +26,7 @@
 | config | 配置加载与默认值 | ✅稳定 | [config](modules/config.md) |
 | cli | Linux 命令行入口与运行管理 | ✅稳定 | [cli](modules/cli.md) |
 | gui-win | Windows GUI（Fyne）与运行管理 | ✅稳定 | [gui-win](modules/gui-win.md) |
+| gui-linux | Linux GUI（Fyne）与运行管理 | ✅稳定 | [gui-linux](modules/gui-linux.md) |
 
 ---
 

@@ -1,6 +1,6 @@
-//go:build windows
+//go:build linux
 
-// Windows GUI 入口使用 Fyne 启动代理并显示状态。
+// Linux GUI 入口使用 Fyne 启动代理并显示状态。
 package main
 
 import (
@@ -32,7 +32,7 @@ func main() {
 	window := fyneApp.NewWindow("Sunshine Pacing Proxy")
 
 	cfgPathEntry := widget.NewEntry()
-	cfgPathEntry.SetPlaceHolder("配置文件路径，如 C:\\proxy.yml")
+	cfgPathEntry.SetPlaceHolder("配置文件路径，如 /home/user/proxy.yml")
 
 	baseEntry := widget.NewEntry()
 	hostEntry := widget.NewEntry()

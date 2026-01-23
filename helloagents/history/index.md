@@ -19,6 +19,9 @@
 | 202601231353 | 连接日志开关 | 变更 | ✅已完成 | [history/2026-01/202601231353_connection_logging](2026-01/202601231353_connection_logging/) |
 | 202601231513 | 回包日志开关 | 变更 | ✅已完成 | [history/2026-01/202601231513_response_logging](2026-01/202601231513_response_logging/) |
 | 202601231529 | 纯转发模式开关 | 变更 | ✅已完成 | [history/2026-01/202601231529_pacing_bypass](2026-01/202601231529_pacing_bypass/) |
+| 202601231757 | Linux GUI 构建支持 | 变更 | ✅已完成 | [history/2026-01/202601231757_linux_gui](2026-01/202601231757_linux_gui/) |
+| 202601231447 | 配置调参与音频轻量限制 | 变更 | [-]未执行 | [history/2026-01/202601231447_audio_control_tuning](2026-01/202601231447_audio_control_tuning/) |
+| 202601232204 | GUI 启动配置一致性修复 | 修复 | ✅已完成 | [history/2026-01/202601232204_gui_config_fix](2026-01/202601232204_gui_config_fix/) |
 
 ---
 
@@ -37,3 +40,6 @@
 - [202601231353_connection_logging](2026-01/202601231353_connection_logging/) - 连接日志开关
 - [202601231513_response_logging](2026-01/202601231513_response_logging/) - 回包日志开关
 - [202601231529_pacing_bypass](2026-01/202601231529_pacing_bypass/) - 纯转发模式开关
+- [202601231757_linux_gui](2026-01/202601231757_linux_gui/) - Linux GUI 入口与构建支持
+- [202601231447_audio_control_tuning](2026-01/202601231447_audio_control_tuning/) - 配置调参与音频轻量限制（未执行）
+- [202601232204_gui_config_fix](2026-01/202601232204_gui_config_fix/) - GUI 启动配置一致性修复

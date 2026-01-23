@@ -1,17 +1,17 @@
-# Windows GUI 模块（gui-win）
+# Linux GUI 模块（gui-linux）
 
 ## 目的
-提供 Windows 平台的 Fyne GUI，用于配置、启动/停止代理与查看状态。
+提供 Linux 平台的 Fyne GUI，用于配置、启动/停止代理与查看状态。
 
 ## 模块概述
 - **职责:** 配置编辑/保存、运行控制、日志/指标展示
 - **状态:** ✅稳定
-- **最后更新:** 2026-01-21
+- **最后更新:** 2026-01-23
 
 ## 规范
 
-### 需求: Windows GUI
-**模块:** gui-win
+### 需求: Linux GUI
+**模块:** gui-linux
 使用 Fyne 提供基础界面与运行管理。
 
 #### 场景: 基础 GUI 操作
@@ -32,5 +32,4 @@
 - core
 
 ## 变更历史
-- [202601211643_sunshine_pacing_proxy](../../history/2026-01/202601211643_sunshine_pacing_proxy/) - GUI 运行管理
-- [202601212055_gui_default_config](../../history/2026-01/202601212055_gui_default_config/) - Windows GUI 默认配置与启动
+- [202601231757_linux_gui](../../history/2026-01/202601231757_linux_gui/) - Linux GUI 入口与构建支持
