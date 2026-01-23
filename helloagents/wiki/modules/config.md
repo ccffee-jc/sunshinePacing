@@ -34,11 +34,29 @@
 - 预期结果1：UDP/TCP 有连接时输出日志
 - 预期结果2：日志包含端口、流类型、客户端与内部目标
 
+### 需求: 回包日志开关
+**模块:** config
+提供 response_log.enable 用于控制回包日志输出。
+
+#### 场景: 开启回包日志
+用户设置 response_log.enable=true。
+- 预期结果1：内部→外部回包逐包输出日志
+- 预期结果2：日志覆盖所有流
+
+### 需求: 纯转发模式开关
+**模块:** config
+提供 pacing.enable 用于控制是否启用 pacing。
+
+#### 场景: 禁用 pacing
+用户设置 pacing.enable=false。
+- 预期结果1：video/control/audio 全部直通
+- 预期结果2：不启用任何 pacing 逻辑
+
 ## API接口
 - 暂无对外 API
 
 ## 数据模型
-- 配置结构体（base_port/internal_offset/video/control/audio/connection_log）
+- 配置结构体（base_port/internal_offset/video/control/audio/connection_log/response_log/pacing）
 
 ## 依赖
 - core

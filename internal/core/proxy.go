@@ -81,7 +81,7 @@ func (p *Proxy) Start(ctx context.Context) error {
 		return err
 	}
 
-	if p.cfg.Video.Enable {
+	if p.cfg.Video.Enable && p.cfg.Pacing.Enable {
 		p.pacer = NewPacer(
 			p.cfg.Video.RateMbps,
 			p.cfg.Video.BurstKB,

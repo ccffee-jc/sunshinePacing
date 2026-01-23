@@ -9,6 +9,8 @@
 ### 新增
 - 支持 Sunshine 全端口 TCP/UDP 转发（包含 UDP 48010 兼容）。
 - 支持连接日志开关（UDP/TCP 连接输出）。
+- 支持回包逐包日志开关（内部→外部）。
+- 支持 pacing.enable 纯转发模式开关。
 
 ### 变更
 - Windows GUI 启动时自动生成/加载同目录 sunshine-proxy.yml。

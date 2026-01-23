@@ -107,6 +107,14 @@ func (p *Proxy) startInternal(entry PortEntry, internal *net.UDPConn, ext *net.U
 				continue
 			}
 			addr := p.session.GetClient(entry.ExternalPort)
+			if p.cfg.ResponseLog.Enable {
+				client := "none"
+				if addr != nil {
+					client = addr.String()
+				}
+				internalTarget := fmt.Sprintf("%s:%d", p.cfg.InternalHost, entry.InternalPort)
+				log.Printf("回包: name=%s protocol=%s external=%d internal=%s client=%s size=%d", entry.Name, entry.Protocol, entry.ExternalPort, internalTarget, client, n)
+			}
 			if addr == nil {
 				if entry.Stream == StreamVideo {
 					p.stats.AddVideoDrop()

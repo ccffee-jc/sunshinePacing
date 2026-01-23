@@ -17,6 +17,8 @@
 | 202601220034 | Sunshine 全端口转发 | 变更 | ✅已完成 | [history/2026-01/202601220034_ports_forwarding](2026-01/202601220034_ports_forwarding/) |
 | 202601231327 | 本机47989端口族直转 | 变更 | ✅已完成 | [history/2026-01/202601231327_local_47989_forward](2026-01/202601231327_local_47989_forward/) |
 | 202601231353 | 连接日志开关 | 变更 | ✅已完成 | [history/2026-01/202601231353_connection_logging](2026-01/202601231353_connection_logging/) |
+| 202601231513 | 回包日志开关 | 变更 | ✅已完成 | [history/2026-01/202601231513_response_logging](2026-01/202601231513_response_logging/) |
+| 202601231529 | 纯转发模式开关 | 变更 | ✅已完成 | [history/2026-01/202601231529_pacing_bypass](2026-01/202601231529_pacing_bypass/) |
 
 ---
 
@@ -33,3 +35,5 @@
 - [202601220034_ports_forwarding](2026-01/202601220034_ports_forwarding/) - Sunshine 全端口转发支持
 - [202601231327_local_47989_forward](2026-01/202601231327_local_47989_forward/) - 本机47989端口族直转
 - [202601231353_connection_logging](2026-01/202601231353_connection_logging/) - 连接日志开关
+- [202601231513_response_logging](2026-01/202601231513_response_logging/) - 回包日志开关
+- [202601231529_pacing_bypass](2026-01/202601231529_pacing_bypass/) - 纯转发模式开关
