@@ -36,3 +36,4 @@
 - [API 手册](api.md)
 - [数据模型](data.md)
 - [变更历史](../history/index.md)
+- 本地源码镜像: `third_party/sunshine/`（Sunshine 官方仓库 + 子模块，用于检索）

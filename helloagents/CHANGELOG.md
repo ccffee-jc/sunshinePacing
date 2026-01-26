@@ -14,6 +14,7 @@
 - 支持 Linux GUI 入口与构建产物 sunshine-proxy-gui。
 - GUI 新增实时突发图表（video 队列长度）。
 - 新增本地 Metrics HTTP 服务，GUI 启动代理子进程并轮询指标。
+- 新增 Sunshine 官方源码镜像目录（用于本地检索，已加入忽略清单）。
 
 ### 变更
 - Windows GUI 启动时自动生成/加载同目录 sunshine-proxy.yml。
