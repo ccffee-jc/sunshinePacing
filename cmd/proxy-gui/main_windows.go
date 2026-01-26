@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -22,7 +23,6 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"sunshinePacing/internal/config"
-	"sunshinePacing/internal/core"
 )
 
 func main() {
@@ -50,6 +50,8 @@ func main() {
 
 	statusLabel := widget.NewLabelWithData(statusBind)
 	metricsLabel := widget.NewLabelWithData(metricsBind)
+	burstChart := NewBurstChart(120)
+	burstLegend := newBurstLegend()
 
 	if defaultPath, err := defaultConfigPath(); err != nil {
 		dialog.ShowError(err, window)
@@ -58,8 +60,8 @@ func main() {
 		loadOrCreateDefaultConfig(defaultPath, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry, statusBind, window)
 	}
 
-	var runningProxy *core.Proxy
-	var runningCancel context.CancelFunc
+	runtimeState := &proxyRuntime{}
+	metricsClient := newMetricsClient()
 
 	loadBtn := widget.NewButton("加载配置", func() {
 		path := cfgPathEntry.Text
@@ -99,43 +101,141 @@ func main() {
 	})
 
 	startBtn := widget.NewButton("启动", func() {
-		if runningProxy != nil {
+		if cmd, _ := runtimeState.Snapshot(); cmd != nil {
 			dialog.ShowInformation("提示", "代理已在运行", window)
 			return
 		}
-		cfg, err := configFromFormWithBase(cfgPathEntry.Text, false, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry)
+		cfgPath := cfgPathEntry.Text
+		cfg, err := configFromFormWithBase(cfgPath, false, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry)
 		if err != nil {
 			dialog.ShowError(err, window)
 			return
 		}
-		proxy, err := core.NewProxy(cfg)
+		data, err := yaml.Marshal(cfg)
 		if err != nil {
 			dialog.ShowError(err, window)
 			return
 		}
-		ctx, cancel := context.WithCancel(context.Background())
-		if err := proxy.Start(ctx); err != nil {
-			cancel()
+		if err := os.WriteFile(cfgPath, data, 0o644); err != nil {
 			dialog.ShowError(err, window)
 			return
 		}
-		runningProxy = proxy
-		runningCancel = cancel
-		_ = statusBind.Set("运行中")
+		execPath, err := os.Executable()
+		if err != nil {
+			dialog.ShowError(err, window)
+			return
+		}
+		metricsFile, err := os.CreateTemp(filepath.Dir(cfgPath), "sunshine-metrics-*.txt")
+		if err != nil {
+			dialog.ShowError(err, window)
+			return
+		}
+		metricsPath := metricsFile.Name()
+		_ = metricsFile.Close()
+		cliPath := filepath.Join(filepath.Dir(execPath), "sunshine-proxy-cli.exe")
+		cmd := exec.Command(cliPath, "-config", cfgPath, "-metrics-addr", "127.0.0.1:0", "-metrics-file", metricsPath)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Start(); err != nil {
+			_ = os.Remove(metricsPath)
+			dialog.ShowError(err, window)
+			return
+		}
+		pollCtx, pollCancel := context.WithCancel(context.Background())
+		runtimeState.Store(cmd, metricsPath, pollCancel)
+		_ = statusBind.Set("启动中")
+		_ = metricsBind.Set("正在连接指标")
+
+		go func(cmd *exec.Cmd, metricsPath string) {
+			_ = cmd.Wait()
+			if metricsFile, pollCancel, cleared := runtimeState.ClearIf(cmd); cleared {
+				if pollCancel != nil {
+					pollCancel()
+				}
+				if metricsFile != "" {
+					_ = os.Remove(metricsFile)
+				}
+				fyne.Do(func() {
+					_ = statusBind.Set("已停止")
+					_ = metricsBind.Set("暂无数据")
+				})
+			}
+		}(cmd, metricsPath)
+
+		go func(cmd *exec.Cmd, metricsPath string) {
+			addr, err := waitMetricsAddr(metricsPath, 3*time.Second)
+			if err != nil {
+				if metricsFile, pollCancel, cleared := runtimeState.ClearIf(cmd); cleared {
+					if pollCancel != nil {
+						pollCancel()
+					}
+					if cmd.Process != nil {
+						_ = cmd.Process.Kill()
+					}
+					if metricsFile != "" {
+						_ = os.Remove(metricsFile)
+					}
+					fyne.Do(func() {
+						_ = statusBind.Set("启动失败")
+						_ = metricsBind.Set("暂无数据")
+						dialog.ShowError(err, window)
+					})
+				}
+				return
+			}
+			runtimeState.SetMetricsAddr(addr)
+			fyne.Do(func() {
+				_ = statusBind.Set("运行中")
+			})
+		}(cmd, metricsPath)
+
+		go func() {
+			ticker := time.NewTicker(500 * time.Millisecond)
+			defer ticker.Stop()
+			for {
+				select {
+				case <-pollCtx.Done():
+					return
+				case <-ticker.C:
+					cmd, addr := runtimeState.Snapshot()
+					if cmd == nil || addr == "" {
+						continue
+					}
+					snapshot, err := metricsClient.Fetch(pollCtx, addr)
+					if err != nil {
+						fyne.Do(func() {
+							_ = metricsBind.Set("指标连接失败")
+						})
+						continue
+					}
+					text := snapshot.Text()
+					queueLen := snapshot.VideoQueueLen
+					fyne.Do(func() {
+						burstChart.Push(queueLen)
+						_ = metricsBind.Set(text)
+					})
+				}
+			}
+		}()
 	})
 
 	stopBtn := widget.NewButton("停止", func() {
-		if runningProxy == nil {
+		cmd, metricsPath, pollCancel := runtimeState.Take()
+		if cmd == nil {
 			dialog.ShowInformation("提示", "代理未运行", window)
 			return
 		}
-		if runningCancel != nil {
-			runningCancel()
+		if pollCancel != nil {
+			pollCancel()
 		}
-		runningProxy.Stop()
-		runningProxy = nil
-		runningCancel = nil
+		if cmd.Process != nil {
+			_ = cmd.Process.Kill()
+		}
+		if metricsPath != "" {
+			_ = os.Remove(metricsPath)
+		}
 		_ = statusBind.Set("已停止")
+		_ = metricsBind.Set("暂无数据")
 	})
 
 	form := container.NewVBox(
@@ -158,29 +258,14 @@ func main() {
 		statusLabel,
 		widget.NewLabel("统计"),
 		metricsLabel,
+		widget.NewSeparator(),
+		widget.NewLabel("实时突发图表"),
+		burstLegend,
+		burstChart,
 	)
 
 	window.SetContent(form)
 	window.Resize(fyne.NewSize(520, 520))
-
-	go func() {
-		ticker := time.NewTicker(1 * time.Second)
-		defer ticker.Stop()
-		for range ticker.C {
-			if runningProxy == nil {
-				continue
-			}
-			m := runningProxy.Metrics()
-			_ = metricsBind.Set(fmt.Sprintf(
-				"video_out=%dB video_drop=%d queue=%d control_out=%dB audio_out=%dB",
-				m.VideoOutBytes,
-				m.VideoDrops,
-				m.VideoQueueLen,
-				m.ControlOutBytes,
-				m.AudioOutBytes,
-			))
-		}
-	}()
 
 	window.ShowAndRun()
 }

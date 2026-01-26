@@ -12,6 +12,8 @@
 - 支持回包逐包日志开关（内部→外部）。
 - 支持 pacing.enable 纯转发模式开关。
 - 支持 Linux GUI 入口与构建产物 sunshine-proxy-gui。
+- GUI 新增实时突发图表（video 队列长度）。
+- 新增本地 Metrics HTTP 服务，GUI 启动代理子进程并轮询指标。
 
 ### 变更
 - Windows GUI 启动时自动生成/加载同目录 sunshine-proxy.yml。
@@ -28,6 +30,7 @@
 
 ### 修复
 - 修复 GUI 启动与保存时丢失配置字段（以配置文件为基准合并）。
+- 优化 GUI 图表渲染路径，后台渲染减少主线程卡顿。
 
 ### 移除
 - 无。

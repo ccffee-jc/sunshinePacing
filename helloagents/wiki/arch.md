@@ -21,6 +21,8 @@ flowchart TD
     Relay --> Config
 ```
 
+GUI 与代理分离后，GUI 通过本地 HTTP `/metrics` 拉取运行指标用于绘图展示。
+
 ## 技术栈
 - **后端:** Go
 - **前端:** Fyne（仅 Windows）
@@ -50,3 +52,4 @@ sequenceDiagram
 | ADR-003 | 连接日志默认关闭 | 2026-01-23 | ✅已采纳 | config/core/cli | ../history/2026-01/202601231353_connection_logging/how.md#adr-003-连接日志默认关闭 |
 | ADR-005 | 回包日志默认关闭 | 2026-01-23 | ✅已采纳 | config/core/cli | ../history/2026-01/202601231513_response_logging/how.md#adr-005-回包日志默认关闭 |
 | ADR-006 | pacing 开关默认开启 | 2026-01-23 | ✅已采纳 | config/core/cli | ../history/2026-01/202601231529_pacing_bypass/how.md#adr-006-pacing-开关默认开启 |
+| ADR-007 | 本地 HTTP Metrics 服务解耦 GUI/Proxy | 2026-01-26 | ✅已采纳 | core/gui-linux/gui-win/cli | ../history/2026-01/202601261134_proxy_metrics_http/how.md#adr-007-采用本地-http-metrics-服务进行进程间解耦 |

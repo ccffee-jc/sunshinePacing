@@ -16,13 +16,13 @@ type Stats struct {
 
 // StatsSnapshot 为统计快照。
 type StatsSnapshot struct {
-	VideoInBytes    uint64
-	VideoOutBytes   uint64
-	VideoDrops      uint64
-	ControlInBytes  uint64
-	ControlOutBytes uint64
-	AudioInBytes    uint64
-	AudioOutBytes   uint64
+	VideoInBytes    uint64 `json:"video_in_bytes"`
+	VideoOutBytes   uint64 `json:"video_out_bytes"`
+	VideoDrops      uint64 `json:"video_drops"`
+	ControlInBytes  uint64 `json:"control_in_bytes"`
+	ControlOutBytes uint64 `json:"control_out_bytes"`
+	AudioInBytes    uint64 `json:"audio_in_bytes"`
+	AudioOutBytes   uint64 `json:"audio_out_bytes"`
 }
 
 // Snapshot 生成当前统计快照。

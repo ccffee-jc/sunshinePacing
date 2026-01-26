@@ -22,6 +22,10 @@
 | 202601231757 | Linux GUI 构建支持 | 变更 | ✅已完成 | [history/2026-01/202601231757_linux_gui](2026-01/202601231757_linux_gui/) |
 | 202601231447 | 配置调参与音频轻量限制 | 变更 | [-]未执行 | [history/2026-01/202601231447_audio_control_tuning](2026-01/202601231447_audio_control_tuning/) |
 | 202601232204 | GUI 启动配置一致性修复 | 修复 | ✅已完成 | [history/2026-01/202601232204_gui_config_fix](2026-01/202601232204_gui_config_fix/) |
+| 202601232241 | GUI 实时突发图表 | 功能 | ✅已完成 | [history/2026-01/202601232241_gui_realtime_chart](2026-01/202601232241_gui_realtime_chart/) |
+| 202601232305 | 图表渲染性能优化 | 修复 | ✅已完成 | [history/2026-01/202601232305_chart_render_opt](2026-01/202601232305_chart_render_opt/) |
+| 202601232311 | 图表仅显示视频队列 | 变更 | ✅已完成 | [history/2026-01/202601232311_video_only_chart](2026-01/202601232311_video_only_chart/) |
+| 202601261134 | 代理进程分离与 Metrics HTTP | 功能 | ✅已完成 | [history/2026-01/202601261134_proxy_metrics_http](2026-01/202601261134_proxy_metrics_http/) |
 
 ---
 
@@ -43,3 +47,7 @@
 - [202601231757_linux_gui](2026-01/202601231757_linux_gui/) - Linux GUI 入口与构建支持
 - [202601231447_audio_control_tuning](2026-01/202601231447_audio_control_tuning/) - 配置调参与音频轻量限制（未执行）
 - [202601232204_gui_config_fix](2026-01/202601232204_gui_config_fix/) - GUI 启动配置一致性修复
+- [202601232241_gui_realtime_chart](2026-01/202601232241_gui_realtime_chart/) - GUI 实时突发图表
+- [202601232305_chart_render_opt](2026-01/202601232305_chart_render_opt/) - 图表渲染性能优化
+- [202601232311_video_only_chart](2026-01/202601232311_video_only_chart/) - 图表仅显示视频队列
+- [202601261134_proxy_metrics_http](2026-01/202601261134_proxy_metrics_http/) - 代理进程分离与 Metrics HTTP

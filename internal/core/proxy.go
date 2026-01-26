@@ -19,7 +19,7 @@ const defaultSessionTimeout = 10 * time.Second
 // Metrics 为 GUI/CLI 提供的运行快照。
 type Metrics struct {
 	StatsSnapshot
-	VideoQueueLen int
+	VideoQueueLen int `json:"video_queue_len"`
 }
 
 type tcpListener struct {
