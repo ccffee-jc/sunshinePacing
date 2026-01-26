@@ -24,11 +24,11 @@ type Config struct {
 
 // VideoConfig 为视频 pacing 参数。
 type VideoConfig struct {
-	Enable          bool `yaml:"enable"`
-	RateMbps        int  `yaml:"rate_mbps"`
-	BurstKB         int  `yaml:"burst_kb"`
-	MaxQueueDelayMs int  `yaml:"max_queue_delay_ms"`
-	TickMs          int  `yaml:"tick_ms"`
+	Enable          bool    `yaml:"enable"`
+	RateMbps        int     `yaml:"rate_mbps"`
+	BurstKB         int     `yaml:"burst_kb"`
+	MaxQueueDelayMs int     `yaml:"max_queue_delay_ms"`
+	TickMs          float64 `yaml:"tick_ms"`
 }
 
 // StreamConfig 为控制流的配置。

@@ -277,7 +277,7 @@ func setFormDefaults(baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, ti
 	rateEntry.SetText(strconv.Itoa(cfg.Video.RateMbps))
 	burstEntry.SetText(strconv.Itoa(cfg.Video.BurstKB))
 	queueEntry.SetText(strconv.Itoa(cfg.Video.MaxQueueDelayMs))
-	tickEntry.SetText(strconv.Itoa(cfg.Video.TickMs))
+	tickEntry.SetText(strconv.FormatFloat(cfg.Video.TickMs, 'f', -1, 64))
 }
 
 func defaultConfigPath() (string, error) {
@@ -327,7 +327,7 @@ func fillForm(cfg config.Config, baseEntry, hostEntry, rateEntry, burstEntry, qu
 	rateEntry.SetText(strconv.Itoa(cfg.Video.RateMbps))
 	burstEntry.SetText(strconv.Itoa(cfg.Video.BurstKB))
 	queueEntry.SetText(strconv.Itoa(cfg.Video.MaxQueueDelayMs))
-	tickEntry.SetText(strconv.Itoa(cfg.Video.TickMs))
+	tickEntry.SetText(strconv.FormatFloat(cfg.Video.TickMs, 'f', -1, 64))
 }
 
 func configFromFormWithBase(path string, allowMissing bool, baseEntry, hostEntry, rateEntry, burstEntry, queueEntry, tickEntry *widget.Entry) (config.Config, error) {
@@ -363,7 +363,7 @@ func configFromFormWithBase(path string, allowMissing bool, baseEntry, hostEntry
 	if err != nil {
 		return cfg, fmt.Errorf("max_queue_delay_ms 无效")
 	}
-	tickMs, err := strconv.Atoi(tickEntry.Text)
+	tickMs, err := strconv.ParseFloat(tickEntry.Text, 64)
 	if err != nil {
 		return cfg, fmt.Errorf("tick_ms 无效")
 	}

@@ -86,7 +86,7 @@ func (p *Proxy) Start(ctx context.Context) error {
 			p.cfg.Video.RateMbps,
 			p.cfg.Video.BurstKB,
 			time.Duration(p.cfg.Video.MaxQueueDelayMs)*time.Millisecond,
-			time.Duration(p.cfg.Video.TickMs)*time.Millisecond,
+			time.Duration(p.cfg.Video.TickMs*float64(time.Millisecond)),
 			func(data []byte, addr *net.UDPAddr) error {
 				_, err := p.extVideo.WriteToUDP(data, addr)
 				return err
